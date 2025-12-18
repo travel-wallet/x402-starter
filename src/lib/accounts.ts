@@ -1,73 +1,23 @@
 import { Account, toAccount } from "viem/accounts";
-import { CdpClient } from "@coinbase/cdp-sdk";
 import { base, baseSepolia } from "viem/chains";
-import { createPublicClient, http } from "viem";
 import { env } from "./env";
 
-let cdp: CdpClient | null = null;
-
-function getCdpClient() {
-  if (!cdp) {
-    cdp = new CdpClient();
-  }
-  return cdp;
-}
+const PURCHASER = "0x24c72816ccd0be389b0f66038382fd1da3f0bd60";
+const SELLER = "0x3181b547a9c45f7fae83287f3871c91adf7491fa";
 
 const chainMap = {
-  "base-sepolia": baseSepolia,
-  base: base,
+    "base-sepolia": baseSepolia,
+    base: base,
 } as const;
 
 export function getChain() {
-  return chainMap[env.NETWORK];
-}
-
-function getPublicClient() {
-  return createPublicClient({
-    chain: getChain(),
-    transport: http(),
-  });
+    return chainMap[env.NETWORK];
 }
 
 export async function getOrCreatePurchaserAccount(): Promise<Account> {
-  const cdpClient = getCdpClient();
-  const account = await cdpClient.evm.getOrCreateAccount({
-    name: "Purchaser",
-  });
-  const balances = await account.listTokenBalances({
-    network: env.NETWORK,
-  });
-
-  const usdcBalance = balances.balances.find(
-    (balance) => balance.token.symbol === "USDC"
-  );
-
-  // if under $0.50 while on testnet, request more
-  if (
-    env.NETWORK === "base-sepolia" &&
-    (!usdcBalance || Number(usdcBalance.amount) < 500000)
-  ) {
-    const { transactionHash } = await cdpClient.evm.requestFaucet({
-      address: account.address,
-      network: env.NETWORK,
-      token: "usdc",
-    });
-    const publicClient = getPublicClient();
-    const tx = await publicClient.waitForTransactionReceipt({
-      hash: transactionHash,
-    });
-    if (tx.status !== "success") {
-      throw new Error("Failed to recieve funds from faucet");
-    }
-  }
-
-  return toAccount(account);
+    return toAccount({ address: PURCHASER });
 }
 
 export async function getOrCreateSellerAccount(): Promise<Account> {
-  const cdpClient = getCdpClient();
-  const account = await cdpClient.evm.getOrCreateAccount({
-    name: "Seller",
-  });
-  return toAccount(account);
+    return toAccount({ address: SELLER });
 }
