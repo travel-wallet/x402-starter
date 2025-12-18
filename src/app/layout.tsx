@@ -4,33 +4,33 @@ import "./globals.css";
 import Link from "next/link";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+    variable: "--font-geist-sans",
+    subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "x402 AI Starter Kit",
-  description:
-    "A demo of agentic payments powered by x402 using Next.js, AI SDK, AI Elements, AI Gateway, and the Coinbase CDP",
+    title: "x402 AI Starter Kit",
+    description:
+        "A demo of agentic payments powered by x402 using Next.js, AI SDK, AI Elements, AI Gateway, and the Coinbase CDP",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" className="h-full">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
-      >
-        <div className="size-full flex flex-col">
-          <header className={`${geistSans.className} border-b border-black`}>
+    return (
+        <html lang="en" className="h-full">
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
+            >
+                <div className="size-full flex flex-col">
+                    {/* <header className={`${geistSans.className} border-b border-black`}>
             <div className="flex flex-col gap-2 w-full">
               <div className="flex flex-row gap-2 text-xl font-bold items-center justify-center">
                 <Link
@@ -89,11 +89,11 @@ export default function RootLayout({
                 </div>
               </div>
             </div>
-          </header>
+          </header> */}
 
-          <main className="flex-1">{children}</main>
-        </div>
-      </body>
-    </html>
-  );
+                    <main className="flex-1">{children}</main>
+                </div>
+            </body>
+        </html>
+    );
 }

@@ -26,6 +26,16 @@ export const x402Middleware = paymentMiddleware(
                 description: "Access to protected content",
             },
         },
+        "/room/checkout": {
+            price: "$100.00",
+            network,
+            config: {
+                description: "Booking payment for Sunny Studio",
+                mimeType: "text/html",
+                maxTimeoutSeconds: 300,
+                customPaywallHtml: `<!doctype html><html><head><meta http-equiv="refresh" content="0;url=/room/checkout/pay"></head><body></body></html>`,
+            },
+        },
     },
     facilitator
 );
